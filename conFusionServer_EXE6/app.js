@@ -21,7 +21,7 @@ const dishRouter = require('./routes/dishRouter');
 const bookRouter = require('./routes/bookRouter');
 const genreRouter = require('./routes/genreRouter');
 const authorRouter = require('./routes/authorRouter');
-const promoRouter = require('./routes/promoRouter');
+const promotionRouter = require('./routes/promotionRouter');
 const leaderRouter = require('./routes/leaderRouter');
 
 var app = express();
@@ -39,11 +39,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/dishes', dishRouter);
-app.use('/book', bookRouter);
-app.use('/genre', genreRouter);
+app.use('/books', bookRouter);
+app.use('/genres', genreRouter);
 app.use('/author', authorRouter);
-app.use('/promo', promoRouter);
-app.use('/leader', leaderRouter);
+app.use('/promotions', promotionRouter);
+app.use('/leaders', leaderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

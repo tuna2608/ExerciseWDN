@@ -1,48 +1,80 @@
+
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-const genreRoutes = express.Router();
+const Genres = require('../models/genres');
 
-genreRoutes.use(bodyParser.json());
+const genreRouter = express.Router();
 
-genreRoutes.route('/')
-.all((req,res,next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    next();
-})
-.get((req,res,next) => {
-    res.end('Will send all the genres to you!');
-})
-.post((req, res, next) => {
-    res.end('Will add the genre:' 
-    +"Id: " +req.body.id
-    +'; Name: ' + req.body.name);
-})
-.put((req, res, next) => {
-    res.statusCode = 403;
-    res.end('PUT operation not supported on /genre');
-})
-.delete((req, res, next) => {
-    res.end('Deleting all genre');
-});
+genreRouter.use(bodyParser.json());
 
-genreRoutes.route('/:genresId')
-.get((req,res,next) => {
-    res.end('Will send details of the genre: ' + req.params.genresId +' to you!');
-})
-.post((req, res, next) => {
-  res.statusCode = 403;
-  res.end('POST operation not supported on /genre/'+ req.params.genresId);
-})
-.put((req, res, next) => {
-  res.write('Updating the genre: ' + req.params.genresId + '\n');
-  res.end('Will update the genre: ' 
-  +"Id: " +req.body.id
-  +'; Name: ' + req.body.name);
-})
-.delete((req, res, next) => {
-    res.end('Deleting genre: ' + req.params.genresId);
-});
+genreRouter.route('/')
+    .get((req, res, next) => {
+        Genres.find({})
+            .then((Genres) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(Genres);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post((req, res, next) => {
+        Genres.create(req.body)
+            .then((genre) => {
+                console.log('genre Created ', genre);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(genre);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .put((req, res, next) => {
+        res.statusCode = 403;
+        res.end('PUT operation not supported on /Genres');
+    })
+    .delete((req, res, next) => {
+        Genres.remove({})
+            .then((resp) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(resp);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    });
 
-module.exports = genreRoutes;
+genreRouter.route('/:genreId')
+    .get((req, res, next) => {
+        Genres.findById(req.params.genreId)
+            .then((genre) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(genre);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post((req, res, next) => {
+        res.statusCode = 403;
+        res.end('POST operation not supported on /Genres/' + req.params.genreId);
+    })
+    .put((req, res, next) => {
+        Genres.findByIdAndUpdate(req.params.genreId, {
+            $set: req.body
+        }, { new: true })
+            .then((genre) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(genre);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete((req, res, next) => {
+        Genres.findByIdAndRemove(req.params.genreId)
+            .then((resp) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(resp);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    });
+module.exports = genreRouter;
