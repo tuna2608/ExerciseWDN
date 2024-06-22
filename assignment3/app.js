@@ -5,20 +5,20 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
-
 var passport = require('passport');
+var mongoose = require('mongoose');
+
+
 var authenticate = require('./authenticate');
 
 var config = require('./config');
 
-const mongoose = require('mongoose');
 
-const Dishes = require('./models/dishes');
+// const Dishes = require('./models/dishes');
 
 // const url = 'mongodb://localhost:27017/conFusion';
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
-
 
 connect.then((db) => {
   console.log("Connected correctly to server");
@@ -32,6 +32,7 @@ const genreRouter = require('./routes/genreRouter');
 const authorRouter = require('./routes/authorRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const leaderRouter = require('./routes/leaderRouter');
+const commentRouter = require('./routes/commentRouter');
 
 var app = express();
 
@@ -81,6 +82,7 @@ app.use('/genres', genreRouter);
 app.use('/author', authorRouter);
 app.use('/promotions', promotionRouter);
 app.use('/leaders', leaderRouter);
+app.use('/comments', commentRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
