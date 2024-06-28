@@ -33,6 +33,7 @@ const authorRouter = require('./routes/authorRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const leaderRouter = require('./routes/leaderRouter');
 const commentRouter = require('./routes/commentRouter');
+const uploadRouter = require('./routes/uploadRouter');
 
 var app = express();
 
@@ -83,6 +84,7 @@ app.use('/author', authorRouter);
 app.use('/promotions', promotionRouter);
 app.use('/leaders', leaderRouter);
 app.use('/comments', commentRouter);
+app.use('/imageUpload',uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
