@@ -34,6 +34,7 @@ const promotionRouter = require('./routes/promotionRouter');
 const leaderRouter = require('./routes/leaderRouter');
 const commentRouter = require('./routes/commentRouter');
 const uploadRouter = require('./routes/uploadRouter');
+const favoriteRouter = require('./routes/favoriteRouter');
 
 var app = express();
 
@@ -80,11 +81,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/dishes', dishRouter);
 app.use('/books', bookRouter);
 app.use('/genres', genreRouter);
-app.use('/author', authorRouter);
+app.use('/authors', authorRouter);
 app.use('/promotions', promotionRouter);
 app.use('/leaders', leaderRouter);
 app.use('/comments', commentRouter);
 app.use('/imageUpload',uploadRouter);
+app.use('/favorites',favoriteRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
